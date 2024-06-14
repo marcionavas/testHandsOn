@@ -5,7 +5,11 @@
 package com.example.testHandsOn.model;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 /**
  *
@@ -40,5 +44,31 @@ public class Funcionario extends Pessoa {
 
     public void setFuncao(String funcao) {
         this.funcao = funcao;
+    }
+    
+    private String formatValores(BigDecimal num){
+        
+        DecimalFormatSymbols symbols;
+        
+        // Definir símbolos personalizados para separadores de milhar e decimal
+        symbols = new DecimalFormatSymbols(new Locale("pt", "BR"));
+        symbols.setGroupingSeparator('.');
+        symbols.setDecimalSeparator(',');
+
+        // Criar o formato desejado
+        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00", symbols);        
+
+        // Exibir o número formatado
+        //System.out.println(decimalFormat.format(num));
+        
+        return decimalFormat.format(num);        
+    }
+    
+    
+    @Override
+    public String toString() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return String.format("Nome: %-15s Data de Nascimento: %-15s Salário: %-15s Função: %s",
+                this.getNome(), this.getDtNacimento().format(formatter), formatValores(salario), funcao);
     }
 }

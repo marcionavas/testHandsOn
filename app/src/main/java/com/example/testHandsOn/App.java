@@ -11,9 +11,10 @@ public class App {
     public static void main(String[] args) {
         
         Rotinas rot = new Rotinas();
-        rot.imprimirFuncionarios("Lista de Funcionários:");
+        rot.impFuncionarios("Lista de Funcionários:");
         rot.atualizarSalario("10%");
-        rot.imprimirFuncionarios("Lista de Funcionários com Aumento:");
+        rot.impFuncionarios("Lista de Funcionários com Aumento:");
+        rot.impAgrupadosFuncao();
         //rot.rmFuncionario("Maria");
         //rot.formatNum(new BigDecimal("2009.44"));
         

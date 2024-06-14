@@ -7,14 +7,13 @@ package com.example.testHandsOn.controller;
 import com.example.testHandsOn.model.Funcionario;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -22,14 +21,12 @@ import java.util.Optional;
  */
 public class Rotinas {
     
-    private final List<Funcionario> listaFuncionarios = new ArrayList<>();
-    
+    private final List<Funcionario> listaFuncionarios = new ArrayList<>();    
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     
-    DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        
     
-    
-    
+    //Método construtor para adicionar todos os funcionários e seus respectivos dados a lista "listaFuncionarios"
     public Rotinas() {    
                 
         listaFuncionarios.add(new Funcionario("Maria", LocalDate.parse("18/10/2000", formatter), new BigDecimal("2009.44"), "Operador"));
@@ -43,56 +40,57 @@ public class Rotinas {
         listaFuncionarios.add(new Funcionario("Heloísa", LocalDate.parse("24/05/2003", formatter), new BigDecimal("1606.85"), "Eletricista"));
         listaFuncionarios.add(new Funcionario("Helena", LocalDate.parse("02/09/1996", formatter), new BigDecimal("2799.93"), "Gerente"));
         
-    }
-    
-    public String formatValores(BigDecimal num){
-        
-        // Definir símbolos personalizados para separadores de milhar e decimal
-        symbols = new DecimalFormatSymbols(new Locale("pt", "BR"));
-        symbols.setGroupingSeparator('.');
-        symbols.setDecimalSeparator(',');
-
-        // Criar o formato desejado
-        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00", symbols);        
-
-        // Exibir o número formatado
-        //System.out.println(decimalFormat.format(num));
-        
-        return decimalFormat.format(num);        
-    }
-    
-    public String formatDt(LocalDate data) {
-        return data.format(formatter);
-    }
+    } 
     
     //Remoção de funcionário da lista usando abordagem Java Streams (Java 8+)
     public void rmFuncionario(String nome) {        
         
-        Optional<Funcionario> personToDelete = listaFuncionarios.stream()
+        Optional<Funcionario> funDeletar = listaFuncionarios.stream()
                 .filter(funcionario -> funcionario.getNome().equals(nome))
                 .findFirst();
 
-        personToDelete.ifPresent(listaFuncionarios::remove);
+        funDeletar.ifPresent(listaFuncionarios::remove);
     }
     
-    public void imprimirFuncionarios(String titulo){
-        //System.out.println("\nFormatted printing:");
+    //Imprime a tabela de funcionários
+    public void impFuncionarios(String titulo){
+        
         System.out.println("\n" + titulo);
-        System.out.println("------------");
-        for (Funcionario funcionario : listaFuncionarios) {
-            System.out.println(String.format("Nome: %-15s Data de Nascimento: %-15s Salário: %-15s Função: %s", funcionario.getNome(), formatDt(funcionario.getDtNacimento()),
-                    formatValores(funcionario.getSalario()), funcionario.getFuncao()));
-        }
+        System.out.println("------------");      
+            
+            
+            listaFuncionarios.forEach(System.out::println);
     }
     
+    //Realiza aumento do salário dos funcionários
     public void atualizarSalario(String aumento){
         
-                
-        for (Funcionario funcionario : listaFuncionarios) {
-            
-            funcionario.setSalario(funcionario.getSalario().add(funcionario.getSalario().multiply((new BigDecimal(aumento.replace("%", "")).divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP)))));
-        }
+        for (Funcionario funcionario : listaFuncionarios) {            
+            funcionario.setSalario(funcionario.getSalario().
+                    add(funcionario.getSalario().multiply((new BigDecimal(aumento.
+                            replace("%", "")).divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP)))));
+        }        
+    }
+    
+    //Função MAP para agrupar os funcionários por função; Retorna um MAP desse agrupamento de funcionários por função chamado "funcionariosPorFuncao"
+    private Map<String,List<Funcionario>> agruparFuncionarioPorFuncao(){
         
+        Map<String, List<Funcionario>> funcionariosPorFuncao = listaFuncionarios.stream()
+            .collect(Collectors.groupingBy(Funcionario::getFuncao));
+        
+        return funcionariosPorFuncao;       
+    }
+    
+    //Imprime o agrupamento de funcionários com base no MAP retornado pela função "agruparFuncionariosPorFuncao"
+    public void impAgrupadosFuncao(){
+        
+        System.out.println("\nFuncionários Agrupados Por Função:");
+        System.out.println("---------------------------------------------------------------------------------------------------------");
+        agruparFuncionarioPorFuncao().forEach((funcao, funcionarios) -> {
+            System.out.println("Função: " + funcao);
+            funcionarios.forEach(System.out::println);
+            System.out.println("---------------------------------------------------------------------------------------------------------");
+        });
     }
     
     
