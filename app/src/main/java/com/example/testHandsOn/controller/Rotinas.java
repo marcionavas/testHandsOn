@@ -157,6 +157,24 @@ public class Rotinas {
         });
     }
     
+    public void impFuncionarioMaisVelho(){
+        
+        Funcionario maisVelho = listaFuncionarios.stream()
+                .max((f1, f2) -> Integer.compare(f1.getIdade(), f2.getIdade()))
+                .orElse(null);
+
+        if (maisVelho != null) {
+            System.out.println("\nFuncionário com a maior idade:");
+            System.out.println("---------------------------------------------------------------------------------------------------------");
+            System.out.println("Nome: " + maisVelho.getNome());
+            System.out.println("Idade: " + maisVelho.getIdade());
+        } else {
+            System.out.println("Nenhum funcionário encontrado.");
+        }
+    }
+    
+    
+    
     
     
     

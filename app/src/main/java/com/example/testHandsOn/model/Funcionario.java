@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
@@ -62,6 +63,10 @@ public class Funcionario extends Pessoa {
         //System.out.println(decimalFormat.format(num));
         
         return decimalFormat.format(num);        
+    }
+    
+    public int getIdade() {
+        return Period.between(this.getDtNacimento(), LocalDate.now()).getYears();
     }
     
     
