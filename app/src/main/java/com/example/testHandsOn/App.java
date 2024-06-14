@@ -12,10 +12,22 @@ public class App {
         
         Rotinas rot = new Rotinas();
         rot.impFuncionarios("Lista de Funcionários:");
-        rot.atualizarSalario("10%");
-        rot.impFuncionarios("Lista de Funcionários com Aumento:");
-        rot.impAgrupadosFuncao();
+        //rot.atualizarSalario("10%");
+        //rot.impFuncionarios("Lista de Funcionários com Aumento:");
+        //rot.impAgrupadosFuncao();
         //rot.rmFuncionario("Maria");
+        
+        rot.impNiverMes("outubro", "maio");
+        rot.impNiverMes("julho", "março");
+
+        //rot.setMesesNiver("Maio");
+        
+        //rot.impFunDtNiver();
+        
+        
+        
+        
+        
         //rot.formatNum(new BigDecimal("2009.44"));
         
     }

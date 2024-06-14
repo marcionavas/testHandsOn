@@ -8,10 +8,13 @@ import com.example.testHandsOn.model.Funcionario;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -21,8 +24,26 @@ import java.util.stream.Collectors;
  */
 public class Rotinas {
     
-    private final List<Funcionario> listaFuncionarios = new ArrayList<>();    
+    private final List<Funcionario> listaFuncionarios = new ArrayList<>();
+    private ArrayList<Integer> meses = new ArrayList<>();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private static final Map<String, Integer> mesesMap = new HashMap<>();
+    
+    
+    static {
+        mesesMap.put("janeiro", Month.JANUARY.getValue());
+        mesesMap.put("fevereiro", Month.FEBRUARY.getValue());
+        mesesMap.put("março", Month.MARCH.getValue());
+        mesesMap.put("abril", Month.APRIL.getValue());
+        mesesMap.put("maio", Month.MAY.getValue());
+        mesesMap.put("junho", Month.JUNE.getValue());
+        mesesMap.put("julho", Month.JULY.getValue());
+        mesesMap.put("agosto", Month.AUGUST.getValue());
+        mesesMap.put("setembro", Month.SEPTEMBER.getValue());
+        mesesMap.put("outubro", Month.OCTOBER.getValue());
+        mesesMap.put("novembro", Month.NOVEMBER.getValue());
+        mesesMap.put("dezembro", Month.DECEMBER.getValue());
+    }
     
         
     
@@ -40,6 +61,8 @@ public class Rotinas {
         listaFuncionarios.add(new Funcionario("Heloísa", LocalDate.parse("24/05/2003", formatter), new BigDecimal("1606.85"), "Eletricista"));
         listaFuncionarios.add(new Funcionario("Helena", LocalDate.parse("02/09/1996", formatter), new BigDecimal("2799.93"), "Gerente"));
         
+        
+        
     } 
     
     //Remoção de funcionário da lista usando abordagem Java Streams (Java 8+)
@@ -50,16 +73,6 @@ public class Rotinas {
                 .findFirst();
 
         funDeletar.ifPresent(listaFuncionarios::remove);
-    }
-    
-    //Imprime a tabela de funcionários
-    public void impFuncionarios(String titulo){
-        
-        System.out.println("\n" + titulo);
-        System.out.println("------------");      
-            
-            
-            listaFuncionarios.forEach(System.out::println);
     }
     
     //Realiza aumento do salário dos funcionários
@@ -81,6 +94,57 @@ public class Rotinas {
         return funcionariosPorFuncao;       
     }
     
+    //Função com declaração VARARGS, onde é possível passar os meses/Niver que deseja filtrar os funcionários
+    public void impNiverMes(String... strings){
+        
+        for (String mes : strings) {
+            if (mesesMap.containsKey(mes.toLowerCase())) {
+            meses.add(mesesMap.get(mes.toLowerCase()));
+            } else {
+            throw new IllegalArgumentException("Mês inválido: " + mes);
+            } 
+        }
+        
+        String titulo = "Funcionários Aniversariantes dos meses: ";
+
+        for (int mes : meses) {
+            String nomeMes = getKeyFromValue(mesesMap, mes);
+            titulo += nomeMes + ", ";
+        }
+        
+        System.out.println("\n"+titulo);
+        System.out.println("---------------------------------------------------------------------------------------------------------");
+        for (Funcionario funcionario : listaFuncionarios) {
+            int mesAniversario = funcionario.getDtNacimento().getMonthValue();
+            for (int mes : meses) {
+                if (mesAniversario == mes) {
+                    System.out.println(funcionario.toString());
+                    break;
+                }
+            }
+        }         
+        meses = new ArrayList<>();
+    }
+    
+    //Função para realizar uma busca inversa no MAP e retornar a chave
+    private static <K, V> K getKeyFromValue(Map<K, V> map, V value) {
+        Optional<K> chaveEncontrada = map.entrySet().stream()
+                .filter(entry -> value.equals(entry.getValue()))
+                .map(Map.Entry::getKey)
+                .findFirst();
+        return chaveEncontrada.orElse(null); // Retorna null se o valor não for encontrado
+    }
+    
+    //Imprime a tabela de funcionários
+    public void impFuncionarios(String titulo){
+        
+        System.out.println("\n" + titulo);
+        System.out.println("------------");
+        
+        listaFuncionarios.forEach(System.out::println);
+            
+    }
+    
     //Imprime o agrupamento de funcionários com base no MAP retornado pela função "agruparFuncionariosPorFuncao"
     public void impAgrupadosFuncao(){
         
@@ -92,6 +156,9 @@ public class Rotinas {
             System.out.println("---------------------------------------------------------------------------------------------------------");
         });
     }
+    
+    
+    
     
     
 
