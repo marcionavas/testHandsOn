@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 
 /**
  *
- * @author kali
+ * @author Marcio M. Navas Filho
  */
 public class Funcionario extends Pessoa {
     

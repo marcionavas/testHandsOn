@@ -18,13 +18,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
  *
- * @author kali
+ * @author Marcio M. Navas Filho
  */
 public class Rotinas {
     
@@ -218,6 +217,26 @@ public class Rotinas {
         System.out.println("\nTotal dos Salários dos Funcionários: ");
         System.out.println("---------------------------------------------------------------------------------------------------------");
         System.out.println(formatValores(totalSalarios));
+    }
+    
+    //Função recebe uma string por parâmetro, realiza um parse para BigDecimal, percorre a lista de funcionários dividindo pelo salário mínimo informado e
+    //realiza a impresssão de quantos salários mínimo cada funcionário recebe
+    public void impQtdSalariosMinimos(String minimo){        
+        
+        BigDecimal salarioMinimo = new BigDecimal(minimo);
+        
+        System.out.println("\nQtd de Salários Mínimos que Cada Funcionário Recebe: ");
+        System.out.println("---------------------------------------------------------------------------------------------------------");
+        System.out.println("Salário Mínimo Informado: " + formatValores(salarioMinimo));
+        System.out.println("---------------------------------------------------------------------------------------------------------");
+
+        
+        for (Funcionario funcionario : listaFuncionarios) {
+            BigDecimal quantidadeSalariosMinimos = funcionario.getSalario().divide(salarioMinimo, 2, BigDecimal.ROUND_HALF_UP);
+            System.out.println("\n" + funcionario.getNome() + " ganha " + quantidadeSalariosMinimos + " salários mínimos.");
+                    System.out.println("-------------------------------------------------");
+
+        }
     }
     
     
