@@ -4,7 +4,6 @@
 package com.example.testHandsOn;
 
 import com.example.testHandsOn.controller.Rotinas;
-import java.math.BigDecimal;
 
 public class App {
     
@@ -12,7 +11,9 @@ public class App {
     public static void main(String[] args) {
         
         Rotinas rot = new Rotinas();
-        rot.imprimirFuncionarios();
+        rot.imprimirFuncionarios("Lista de Funcionários:");
+        rot.atualizarSalario("10%");
+        rot.imprimirFuncionarios("Lista de Funcionários com Aumento:");
         //rot.rmFuncionario("Maria");
         //rot.formatNum(new BigDecimal("2009.44"));
         

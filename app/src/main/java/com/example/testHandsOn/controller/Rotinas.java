@@ -6,6 +6,7 @@ package com.example.testHandsOn.controller;
 
 import com.example.testHandsOn.model.Funcionario;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
@@ -74,9 +75,9 @@ public class Rotinas {
         personToDelete.ifPresent(listaFuncionarios::remove);
     }
     
-    public void imprimirFuncionarios(){
+    public void imprimirFuncionarios(String titulo){
         //System.out.println("\nFormatted printing:");
-        System.out.println("\nLista de Funcionários:");
+        System.out.println("\n" + titulo);
         System.out.println("------------");
         for (Funcionario funcionario : listaFuncionarios) {
             System.out.println(String.format("Nome: %-15s Data de Nascimento: %-15s Salário: %-15s Função: %s", funcionario.getNome(), formatDt(funcionario.getDtNacimento()),
@@ -89,7 +90,7 @@ public class Rotinas {
                 
         for (Funcionario funcionario : listaFuncionarios) {
             
-            funcionario.setSalario(funcionario.getSalario().add(funcionario.getSalario().multiply(new BigDecimal(aumento.replace("%", "")))));
+            funcionario.setSalario(funcionario.getSalario().add(funcionario.getSalario().multiply((new BigDecimal(aumento.replace("%", "")).divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP)))));
         }
         
     }
