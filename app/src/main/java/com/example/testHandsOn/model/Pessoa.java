@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 /**
  *
- * @author kali
+ * @author Marcio M Navas Filho
  */
 public class Pessoa {
     
