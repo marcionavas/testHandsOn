@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -157,6 +158,10 @@ public class Rotinas {
         });
     }
     
+    //Imprimi o nome e idade do funcionário mais velho por meio da utilizzação de uma função stream() na lsita de funcionários,
+    //com o emprego da função max() que realiza uma comparação nos elementos da lsita de funcionarios.
+    //Essa comparação tem o emprego da função getIdade() da classe Funcionário que devolve o calculo de idade, calculando a data
+    //de nascimento do funcionário com a data atual. 
     public void impFuncionarioMaisVelho(){
         
         Funcionario maisVelho = listaFuncionarios.stream()
@@ -171,6 +176,14 @@ public class Rotinas {
         } else {
             System.out.println("Nenhum funcionário encontrado.");
         }
+    }
+    
+    public void impListaEmOrdemAlfabetica(){
+        
+        listaFuncionarios.sort(Comparator.comparing(Funcionario::getNome));
+
+        
+        listaFuncionarios.forEach(System.out::println);
     }
     
     

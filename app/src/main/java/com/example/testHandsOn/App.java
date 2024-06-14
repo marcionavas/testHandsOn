@@ -21,6 +21,7 @@ public class App {
         //rot.impNiverMes("julho", "março");
         
         rot.impFuncionarioMaisVelho();
+        rot.impListaEmOrdemAlfabetica();
         
         
 
