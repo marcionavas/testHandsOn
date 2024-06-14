@@ -22,6 +22,7 @@ public class App {
         
         rot.impFuncionarioMaisVelho();
         rot.impListaEmOrdemAlfabetica();
+        rot.impTotalSalario();
         
         
 

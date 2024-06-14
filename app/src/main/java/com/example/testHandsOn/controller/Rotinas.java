@@ -7,6 +7,8 @@ package com.example.testHandsOn.controller;
 import com.example.testHandsOn.model.Funcionario;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
@@ -14,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
@@ -28,9 +31,11 @@ public class Rotinas {
     private final List<Funcionario> listaFuncionarios = new ArrayList<>();
     private ArrayList<Integer> meses = new ArrayList<>();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    private static final Map<String, Integer> mesesMap = new HashMap<>();
     
+    //A variavel mesesMap é inicializada como uma nova instância HashMap
+    private static final Map<String, Integer> mesesMap = new HashMap<>();    
     
+    //Bloco static é utilizado para é usado para preencher mesesMap com pares chave-valor
     static {
         mesesMap.put("janeiro", Month.JANUARY.getValue());
         mesesMap.put("fevereiro", Month.FEBRUARY.getValue());
@@ -44,9 +49,7 @@ public class Rotinas {
         mesesMap.put("outubro", Month.OCTOBER.getValue());
         mesesMap.put("novembro", Month.NOVEMBER.getValue());
         mesesMap.put("dezembro", Month.DECEMBER.getValue());
-    }
-    
-        
+    }       
     
     //Método construtor para adicionar todos os funcionários e seus respectivos dados a lista "listaFuncionarios"
     public Rotinas() {    
@@ -60,11 +63,26 @@ public class Rotinas {
         listaFuncionarios.add(new Funcionario("Arthur", LocalDate.parse("31/03/1993", formatter), new BigDecimal("4071.84"), "Contador"));
         listaFuncionarios.add(new Funcionario("Laura", LocalDate.parse("08/07/1994", formatter), new BigDecimal("3017.45"), "Gerente"));
         listaFuncionarios.add(new Funcionario("Heloísa", LocalDate.parse("24/05/2003", formatter), new BigDecimal("1606.85"), "Eletricista"));
-        listaFuncionarios.add(new Funcionario("Helena", LocalDate.parse("02/09/1996", formatter), new BigDecimal("2799.93"), "Gerente"));
-        
-        
-        
+        listaFuncionarios.add(new Funcionario("Helena", LocalDate.parse("02/09/1996", formatter), new BigDecimal("2799.93"), "Gerente"));       
     } 
+    
+    public static String formatValores(BigDecimal num){
+        
+        DecimalFormatSymbols symbols;
+        
+        // Definir símbolos personalizados para separadores de milhar e decimal
+        symbols = new DecimalFormatSymbols(new Locale("pt", "BR"));
+        symbols.setGroupingSeparator('.');
+        symbols.setDecimalSeparator(',');
+
+        // Criar o formato desejado
+        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00", symbols);        
+
+        // Exibir o número formatado
+        //System.out.println(decimalFormat.format(num));
+        
+        return decimalFormat.format(num);        
+    }
     
     //Remoção de funcionário da lista usando abordagem Java Streams (Java 8+)
     public void rmFuncionario(String nome) {        
@@ -178,12 +196,28 @@ public class Rotinas {
         }
     }
     
-    public void impListaEmOrdemAlfabetica(){
-        
+    //Função ordena a lista em ordem alfabética por meio do emprego da função sort() aplicado à lista de funcionários e utilizando a
+    //biblioteca Comparator do Java esse faz uso da função comparing onde é passado a classe Funcionário e por meio da referência ao método getNome() (::) da instancia
+    //funcionário.
+    public void impListaEmOrdemAlfabetica(){        
+                
         listaFuncionarios.sort(Comparator.comparing(Funcionario::getNome));
-
         
-        listaFuncionarios.forEach(System.out::println);
+        impFuncionarios("Lista de Funcionários em Ordem Alfabética:");
+    }
+    
+    //Função realiza um stream() na listaFuncionários e usando .map pegando pelo salário de cada funcionário é chamado a função .reduce
+    //inicializando o somatório em zero e somando cada sealario. Logo o somatório é atribuido a variável totalSalario, função formatValores
+    //realiza a formatação do total que é finalmente impresso na tela. 
+    public void impTotalSalario(){
+        
+        BigDecimal totalSalarios = listaFuncionarios.stream()
+                .map(Funcionario::getSalario)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+       
+        System.out.println("\nTotal dos Salários dos Funcionários: ");
+        System.out.println("---------------------------------------------------------------------------------------------------------");
+        System.out.println(formatValores(totalSalarios));
     }
     
     
